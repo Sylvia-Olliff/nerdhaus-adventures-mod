@@ -1,0 +1,52 @@
+{
+	"schemaVersion": 1,
+	"id": "nerdhaus-adventures",
+	"version": "${version}",
+	"name": "NerdHaus Adventures",
+	"description": "Customization mod for NerdHaus Adventures modpack",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/SylviaOlliff/nerdhaus-adventures-fabric-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/nerdhaus-adventures/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.sylvanstorm.nerdhaus.adventures.NerdHausAdventures"
+		],
+		"client": [
+			"net.sylvanstorm.nerdhaus.adventures.NerdHausAdventuresClient"
+		],
+		"fabric-datagen": [
+			"net.sylvanstorm.nerdhaus.adventures.NerdHausAdventuresDataGenerator"
+		]
+	},
+	"mixins": [
+		"nerdhaus-adventures.mixins.json",
+		{
+			"config": "nerdhaus-adventures.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.16.14",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*",
+		"spell_power": ">=0.11.0+1.20.1",
+		"spell_engine": ">=0.15.0+1.20.1 <0.16.0+1.20.1",
+		"puffish_skills": ">=0.12.0",
+		"puffish_attributes": ">=0.4.0",
+		"archers": ">=1.2.4+1.20.1",
+		"openpartiesandclaims": ">=0.23.2",
+		"paladins": ">=1.2.6+1.20.1",
+		"simplyskills": ">=1.7.2+1.20.1"
+	},
+	"suggests": {
+		"simplyswords": ">=1.56.0-1.20.1"
+	}
+}
