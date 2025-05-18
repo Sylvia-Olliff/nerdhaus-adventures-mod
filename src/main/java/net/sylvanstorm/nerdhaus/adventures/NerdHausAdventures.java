@@ -2,6 +2,12 @@ package net.sylvanstorm.nerdhaus.adventures;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
+import net.puffish.skillsmod.api.Category;
+import net.puffish.skillsmod.api.SkillsAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,10 +21,31 @@ public class NerdHausAdventures implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		// This code runs as soon as Minecraft is in a mod-load-ready state.
-		// However, some things (like resources) may still be uninitialized.
-		// Proceed with mild caution.
+		ServerPlayConnectionEvents.JOIN.register(((handler, sender, server) -> {
+			LOGGER.info("[NerdHaus] Received Server player JOIN event");
+			processPlayer(handler.player);
+		}));
+	}
 
-		LOGGER.info("Hello Fabric world!");
+	private void processPlayer(ServerPlayerEntity player) {
+		SkillsAPI.streamUnlockedCategories(player)
+				.forEach(category -> processCategory(player, category));
+	}
+
+	/**
+	 * Disables simplyskills default tree. This allows for the use of their abilities without using their tree.
+	 * @param player
+	 * @param category
+	 */
+	private void processCategory(ServerPlayerEntity player, Category category) {
+		String categoryId = category.getId().toString();
+		if (categoryId.equals("simplyskills:tree")) {
+			LOGGER.info("[NerdHaus] Found SimplySkills base tree, disabling...");
+			SkillsAPI.getCategory(new Identifier(categoryId)).ifPresent(categoryObj -> {
+				categoryObj.erase(player);
+				categoryObj.lock(player);
+				LOGGER.info("[NerdHaus] Disabled SimplySkills base tree!");
+			});
+		}
 	}
 }
